@@ -1,0 +1,12 @@
+{
+  "name": "amorous-launcher",
+  "main": "main.js",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "express": "^4.13.1",
+    "mkdirp": "^0.5.1",
+    "node-7z": "^0.3.0",
+    "q": "^1.4.1"
+  }
+}
