@@ -1,0 +1,7 @@
+build:
+  - clean
+  - coffee
+  - copy:copyUi
+  - copy:copyPackage
+  - exec:npmInstallProd
+  - exec:buildWin32

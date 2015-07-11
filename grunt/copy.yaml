@@ -1,0 +1,9 @@
+copyPackage:
+  src: 'package.json'
+  dest: 'app/package.json'
+
+copyUi:
+  expand: true
+  cwd: 'src'
+  src: 'ui/**'
+  dest: 'app'
