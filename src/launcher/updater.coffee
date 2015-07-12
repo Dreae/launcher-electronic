@@ -136,7 +136,8 @@ updateGame = (game) ->
             deffered.reject(err);
           )
 
-    ).on 'error', deffered.reject
+    ).on 'error', (err) ->
+      deffered.reject("Unable to get update data")
 
   deffered.promise
 
@@ -184,6 +185,9 @@ getChunk = (url, number) ->
       stream = res.pipe(fd)
       res.on 'end', ->
         deffered.resolve()
+    ).on('error', (err) ->
+      fd.end()
+      deffered.reject("Error getting chunk #{number}")
     )
   deffered.promise
 
@@ -199,13 +203,13 @@ mergeAndExtract = (game, build) ->
             fs.unlink('data/data.7z', ->
               fs.writeFile("gamedata/#{game}/version.txt", String(build), {flag: 'w+'}, (err) ->
                 if err
-                  deffered.reject(err)
+                  deffered.reject("Error writing version file")
                 else
                   deffered.resolve()
               )
             )
           ).catch((err) ->
-            deffered.reject(err)
+            deffered.reject("Cannot extract files")
           )
         return
       stream = null

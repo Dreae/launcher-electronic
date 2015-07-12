@@ -54,6 +54,11 @@ a {
   display: flex;
 }
 
+.update-single-action {
+  line-height: 36px;
+  vertical-align: middle;
+}
+
 .update-actions .launch-check {
   margin: auto;
   width: auto;

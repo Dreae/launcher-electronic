@@ -27,6 +27,7 @@
         ongoingUpdates[arg.game].resolve(arg);
       }
     } else {
+      console.error(arg.error);
       ongoingUpdates[arg.game].reject(arg.error);
     }
   });
@@ -98,9 +99,9 @@
     <div class="mdl-card__supporting-text">
       { description }
     </div>
-    <div show={ updateAvailable == 0 && !deleting } class="mdl-card__actions mdl-card--border">
+    <div show={ updateAvailable == 0 && playable() } class="mdl-card__actions mdl-card--border">
       Your game is up-to-date!
-      <a show={ !launching } class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect pull-right" onclick={ launchGame } disabled={ launching }>
+      <a class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect pull-right" onclick={ launchGame } disabled={ launching }>
         Play!
       </a>
     </div>
@@ -114,19 +115,25 @@
         Update
       </a>
     </div>
-    <div if={ updateAvailable == -1 && !updateCheckError } class="mdl-card__actions mld-card--border">
+    <div if={ updateAvailable == -1 && !updateCheckError } class="mdl-card__actions mld-card--border update-single-action">
       Checking for updates...
     </div>
-    <div if={ updateCheckError } class="mdl-card__actions mdl-card--border">
+    <div if={ updateCheckError } class="mdl-card__actions mdl-card--border update-single-action">
       Unable to get updates: { updateCheckError }
+      <a class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect pull-right" onclick={ getUpdates }>
+        Retry
+      </a>
     </div>
     <div show={ updating && !updateError } class="mdl-card__actions mdl-card--border progress-holder">
       <div class="mdl-progress mdl-js-progress" id="{ name }-update-progress"></div>
     </div>
-    <div if={ updating && updateError } class="mdl-card__actions mdl-card--border">
+    <div if={ updating && updateError } class="mdl-card__actions mdl-card--border update-single-action">
       Error installing update: { updateError }
+      <a class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect pull-right" onclick={ updateGame }>
+        Retry
+      </a>
     </div>
-    <div if={ deleting } class="mdl-card__actions mdl-card--border progress-holder">
+    <div if={ deleting } class="mdl-card__actions mdl-card--border update-actions">
       Uninstalling...
     </div>
     <div class="mdl-card__menu">
@@ -151,6 +158,10 @@
     vm.launchASAP = !vm.launchASAP;
   }
 
+  playable() {
+    return !updating && !launching && !updateError
+  }
+
   launchGame(e) {
     vm.launching = true;
     vm.parent.launchGame(vm.name).then(function(res) {
@@ -161,6 +172,7 @@
   }
 
   updateGame(e) {
+    document.querySelector('#' + vm.name + "-update-progress").MaterialProgress.setProgress(0);
     vm.parent.updateGame(vm.name).progress(function(progress) {
       document.querySelector('#' + vm.name + "-update-progress").MaterialProgress.setProgress(progress);
     }).then(function(res) {
@@ -196,6 +208,7 @@
   getUpdates() {
     vm.parent.checkForUpdate(vm.name).then(function(res){
       vm.updateAvailable = res.updateAvailable;
+      vm.updateCheckError = null;
       vm.update();
     }).catch(function(err) {
       vm.updateCheckError = err;
