@@ -1,1 +1,7 @@
 node_modules/
+bower_components/
+app/
+build/
+src/ui/riot/
+data/
+gamedata/

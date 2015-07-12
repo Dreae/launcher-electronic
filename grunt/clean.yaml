@@ -1,0 +1,6 @@
+main:
+  - 'app'
+  - 'build'
+  - 'data'
+  - 'gamedata'
+  - 'src/ui/riot'

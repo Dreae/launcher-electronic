@@ -1,0 +1,6 @@
+npmInstallProd:
+  command: 'npm install --production'
+  cwd: 'app'
+
+buildWin32:
+  command: 'electron-packager app "Amorous Launcher" --platform=win32 --arch=ia32 --version=0.29.2 --icon=icon.ico --out=build/'

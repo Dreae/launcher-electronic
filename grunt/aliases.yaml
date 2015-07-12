@@ -1,0 +1,13 @@
+build:
+  - clean
+  - buildNoClean
+
+buildNoClean:
+  - coffee
+  - riot:preCompile
+  - copy:copyUi
+  - copy:copyPackage
+  - copy:copyBower
+  - copy:copy7z
+  - exec:npmInstallProd
+  - exec:buildWin32

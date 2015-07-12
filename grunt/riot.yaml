@@ -1,0 +1,6 @@
+preCompile:
+  expand: true
+  src: '**/*.tag'
+  dest: src/ui/riot
+  cwd: src/ui
+  ext: .js
