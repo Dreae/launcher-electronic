@@ -2,3 +2,4 @@ main:
   - 'app'
   - 'build'
   - 'data'
+  - 'gamedata'

@@ -67,3 +67,13 @@ a {
 .progress-holder .mdl-progress {
   margin: auto;
 }
+
+.mdl-button.launching {
+  display: flex;
+}
+
+.mdl-button.launching .mdl-spinner {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 8px;
+}

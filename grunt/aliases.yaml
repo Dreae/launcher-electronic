@@ -1,5 +1,8 @@
 build:
   - clean
+  - buildNoClean
+
+buildNoClean:
   - coffee
   - riot:preCompile
   - copy:copyUi

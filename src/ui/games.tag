@@ -5,11 +5,13 @@
   this.games = [
     {
       name: 'amorous',
-      logo: 'logo_100.png'
+      logo: 'logo_100.png',
+      description: "In-development furry dating game"
     },
     {
       name: 'bbs',
-      logo: 'bbs_logo_100.png'
+      logo: 'bbs_logo_100.png',
+      description: "Feisty 3-button furry beat-em-up"
     }
   ];
 
@@ -25,20 +27,46 @@
         ongoingUpdates[arg.game].resolve(arg);
       }
     } else {
-      ongoingUpdates[arg.game].reject(arg);
+      ongoingUpdates[arg.game].reject(arg.error);
     }
   });
-  updateGame(game, launch) {
-    console.log("Trying to update game " + game);
+  updateGame(game) {
     var deffered = Q.defer();
     ongoingUpdates[game] = deffered;
-    ipc.send('update-game', {game: game, launch: launch});
+    ipc.send('update-game', {game: game});
 
     return deffered.promise;
   }
 
-  deleteGame(e) {
-    console.log('Trying to delete: ' + e.item.name);
+  var launchingGames = {};
+  ipc.on('game-launch', function(arg) {
+    if(!arg.error) {
+      launchingGames[arg.game].resolve(arg);
+    } else {
+      launchingGames[arg.game].reject(arg);
+    }
+  });
+  launchGame(game) {
+    var deffered = Q.defer();
+    launchingGames[game] = deffered;
+    ipc.send('launch-game', game);
+
+    return deffered.promise;
+  }
+
+  var deletingGames = {};
+  ipc.on('game-deleted', function(arg) {
+    if(!arg.error) {
+      deletingGames[arg.game].resolve(arg);
+    } else {
+      deletingGames[arg.game].reject(arg.error);
+    }
+  });
+  deleteGame(game) {
+    var deffered = Q.defer();
+    deletingGames[game] = deffered;
+    ipc.send('delete-game', game);
+    return deffered.promise;
   }
 
   var promisedUpdates = {};
@@ -46,7 +74,7 @@
     if(!arg.error) {
       promisedUpdates[arg.game].resolve(arg);
     } else {
-      promisedUpdates[arg.game].reject(arg);
+      promisedUpdates[arg.game].reject(arg.error);
     }
   });
   checkForUpdate(game) {
@@ -68,15 +96,15 @@
       <div class="mdl-layout-spacer"></div>
     </div>
     <div class="mdl-card__supporting-text">
-      Hello world!
+      { description }
     </div>
-    <div if={ updateAvailable == 0 } class="mdl-card__actions mdl-card--border">
+    <div show={ updateAvailable == 0 && !deleting } class="mdl-card__actions mdl-card--border">
       Your game is up-to-date!
-      <a class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect pull-right" onclick={ parent.playGame }>
+      <a show={ !launching } class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect pull-right" onclick={ launchGame } disabled={ launching }>
         Play!
       </a>
     </div>
-    <div if={ updateAvailable == 1 && !updating } class="mdl-card__actions update-actions mdl-card--border">
+    <div show={ updateAvailable == 1 && !updating } class="mdl-card__actions update-actions mdl-card--border">
       There is an update available!
       <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect launch-check pull-right" for="{ name }-launch">
         <input type="checkbox" id="{ name }-launch" class="mdl-checkbox__input" checked={ launchASAP } onclick={ toggleLaunch } />
@@ -86,11 +114,20 @@
         Update
       </a>
     </div>
-    <div if={ updateAvailable == -1 } class="mdl-card__actions mld-card--border">
+    <div if={ updateAvailable == -1 && !updateCheckError } class="mdl-card__actions mld-card--border">
       Checking for updates...
     </div>
-    <div show={ updating } class="mdl-card__actions mdl-card--border progress-holder">
+    <div if={ updateCheckError } class="mdl-card__actions mdl-card--border">
+      Unable to get updates: { updateCheckError }
+    </div>
+    <div show={ updating && !updateError } class="mdl-card__actions mdl-card--border progress-holder">
       <div class="mdl-progress mdl-js-progress" id="{ name }-update-progress"></div>
+    </div>
+    <div if={ updating && updateError } class="mdl-card__actions mdl-card--border">
+      Error installing update: { updateError }
+    </div>
+    <div if={ deleting } class="mdl-card__actions mdl-card--border progress-holder">
+      Uninstalling...
     </div>
     <div class="mdl-card__menu">
       <button id="{ name }_card_more" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
@@ -98,7 +135,7 @@
       </button>
       <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
           for="{ name }_card_more">
-        <li class="mdl-menu__item" onclick={ parent.deleteGame }>Delete Content</li>
+        <li class="mdl-menu__item" onclick={ deleteGame }>Delete Content</li>
       </ul>
     </div>
   </div>
@@ -106,26 +143,67 @@
   vm.updateAvailable = -1;
   vm.launchASAP = true;
   vm.updating = false;
+  vm.launching = false;
+  vm.updateCheckError = null;
+  vm.updateError = null;
 
   toggleLaunch(e) {
     vm.launchASAP = !vm.launchASAP;
   }
 
-  updateGame(e) {
-    vm.parent.updateGame(vm.name, vm.launchASAP).progress(function(progress) {
-      document.querySelector('#' + vm.name + "-update-progress").MaterialProgress.setProgress(progress);
-    }).then(function(res) {
-      vm.updating = false;
+  launchGame(e) {
+    vm.launching = true;
+    vm.parent.launchGame(vm.name).then(function(res) {
+      vm.launching = false;
       vm.update();
     });
-    vm.updating = true;
     vm.update();
   }
 
-  vm.on('mount', function(){
+  updateGame(e) {
+    vm.parent.updateGame(vm.name).progress(function(progress) {
+      document.querySelector('#' + vm.name + "-update-progress").MaterialProgress.setProgress(progress);
+    }).then(function(res) {
+      document.querySelector('#' + vm.name + "-update-progress").MaterialProgress.setProgress(0);
+      vm.updating = false;
+      vm.updateAvailable = 0;
+      vm.update();
+      if(vm.launchASAP) {
+        vm.launchGame(null);
+      }
+    }).catch(function(err) {
+      vm.updateError = err;
+      vm.updateAvailable = 0;
+      vm.update();
+    });
+    vm.updating = true;
+    vm.updateError = null;
+    vm.update();
+  }
+
+  deleteGame(e) {
+    vm.deleting = true;
+    vm.update();
+    vm.parent.deleteGame(vm.name).then(function(res) {
+      vm.deleting = false;
+      vm.getUpdates();
+    }).catch(function(err){
+      vm.deleting = false;
+      console.log(err);
+    })
+  }
+
+  getUpdates() {
     vm.parent.checkForUpdate(vm.name).then(function(res){
       vm.updateAvailable = res.updateAvailable;
       vm.update();
+    }).catch(function(err) {
+      vm.updateCheckError = err;
+      vm.update();
     });
+  }
+
+  vm.on('mount', function(){
+    vm.getUpdates();
   });
 </game>
