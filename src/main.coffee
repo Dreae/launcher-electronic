@@ -1,8 +1,15 @@
 app = require('app');
 BrowserWindow = require('browser-window');
 updater = require('./launcher/updater');
+fs = require('fs')
 
 app.on 'ready', ->
+  if process.platform == 'win32'
+    fs.exists('7za.exe', (exists) ->
+      if !exists
+        fs.rename('resources/app/7za.exe', './7za.exe')
+    )
+  
   mainWindow = new BrowserWindow(
     width: 1080,
     height: 720,

@@ -19,3 +19,7 @@ copyBower:
     - bower_components/material-design-lite/material.min.js
     - bower_components/riot/riot+compiler.min.js
   dest: 'app/ui'
+
+copy7z:
+  src: '7za.exe'
+  dest: 'app/7za.exe'
