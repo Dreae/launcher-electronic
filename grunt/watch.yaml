@@ -1,0 +1,6 @@
+tags:
+  files:
+    - src/ui/**/*.tag
+  tasks:
+    - riot
+    

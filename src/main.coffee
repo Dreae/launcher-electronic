@@ -1,17 +1,17 @@
 app = require('app');
 BrowserWindow = require('browser-window');
+updater = require('./launcher/updater');
 
 app.on 'ready', ->
   mainWindow = new BrowserWindow(
     width: 1080,
     height: 720,
-    frame: true,
+    frame: false,
     resizable: false,
-    'node-integration': false,
     'use-content-size': true
   );
-
-  mainWindow.loadUrl('http://launcher.amorousgame.com/v2/');
+  mainWindow.openDevTools();
+  mainWindow.loadUrl('file://'+ __dirname + '/ui/index.html');
 
   mainWindow.on 'closed', ->
     app.quit();

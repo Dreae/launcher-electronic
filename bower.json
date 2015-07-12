@@ -1,0 +1,21 @@
+{
+  "name": "launcher-electronic",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Dreae/launcher-electronic",
+  "authors": [
+    "Dreae <penitenttangentt@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "material-design-lite": "~1.0.0",
+    "riot": "~2.2.1",
+    "roboto-fontface": "~0.4.3",
+  }
+}

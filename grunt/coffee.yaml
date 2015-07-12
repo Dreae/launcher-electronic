@@ -1,8 +1,7 @@
 compileApp:
   expand: true,
-  flatten: true,
-  pwd: 'src'
+  cwd: 'src'
   src:
-    - 'src/**/*.coffee'
+    - '**/*.coffee'
   dest: 'app'
   ext: '.js'

@@ -1,0 +1,69 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(../fonts/MaterialIcons-Regular.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  word-wrap: normal;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Roboto','Helvetica','Arial',sans-serif!important;
+}
+
+a {
+  -webkit-app-region: no-drag;
+}
+
+.mdl-mini-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.card-fill {
+  width: 100%;
+}
+
+.pull-right {
+  float: right;
+}
+
+.update-actions {
+  line-height: 36px;
+  vertical-align: middle;
+  display: flex;
+}
+
+.update-actions .launch-check {
+  margin: auto;
+  width: auto;
+}
+
+.progress-holder {
+  display: flex;
+  height: 52px;
+}
+
+.progress-holder .mdl-progress {
+  margin: auto;
+}

@@ -1,7 +1,9 @@
 build:
   - clean
   - coffee
+  - riot:preCompile
   - copy:copyUi
   - copy:copyPackage
+  - copy:copyBower
   - exec:npmInstallProd
   - exec:buildWin32

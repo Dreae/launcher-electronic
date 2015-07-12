@@ -1,36 +1,43 @@
 <html>
   <head>
+    <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css">
+    <script src="bower_components/material-design-lite/material.min.js"></script>
+    <link rel="stylesheet" href="bower_components/roboto-fontface/css/roboto-fontface.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="static/style/style.css">
   </head>
   <body>
-    <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header">
+      <header class="mdl-layout__header" style="-webkit-app-region: drag">
         <div class="mdl-layout__header-row">
-          <!-- Title -->
-          <span class="mdl-layout-title">Title</span>
-          <!-- Add spacer, to align navigation to the right -->
+          <span class="mdl-layout-title">
+            <img src="static/img/logo_100.png" height="60" alt="Amorous"/>
+          </span>
           <div class="mdl-layout-spacer"></div>
-          <!-- Navigation. We hide it in small screens. -->
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-          </nav>
+          <a href="#" onclick="window.close()" style="color: white"><i class="material-icons">clear</i></a>
         </div>
       </header>
-      <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">Title</span>
-        <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-        </nav>
-      </div>
       <main class="mdl-layout__content">
-        <div class="page-content"><!-- Your content goes here --></div>
+        <div class="page-content">
+          <games class="mdl-grid"></games>
+        <div>
+        <footer class="mdl-mini-footer">
+          <div class="mdl-mini-footer--left-section">
+            <div class="mdl-logo">Amorous</div>
+            <ul class="mdl-mini-footer--link-list">
+              <li><a href="https://forums.amorousgame.com">Forums</a></li>
+              <li><a href="https://www.patreon.com/Amorous">Patreon</a></li>
+            </ul>
+          </div>
+          <div class="mdl-mini-footer--right-section">
+            <div class="mdl-logo">Unofficial Launcher by Dreae</div>
+          </div>
+        </footer>
       </main>
     </div>
+    <script src="bower_components/riot/riot+compiler.min.js"></script>
+    <script src="riot/games.js"></script>
+    <script>
+      riot.mount('games');
+    </script>
   </body>
 </html>
