@@ -18,14 +18,4 @@ copyBower:
     - bower_components/material-design-lite/material.min.css
     - bower_components/material-design-lite/material.min.js
     - bower_components/riot/riot+compiler.min.js
-  dest: 'app'
-
-copyBowerDev:
-  expand: true
-  src:
-    - bower_components/roboto-fontface/css/roboto-fontface.css
-    - bower_components/roboto-fontface/fonts/*
-    - bower_components/material-design-lite/material.min.css
-    - bower_components/material-design-lite/material.min.js
-    - bower_components/riot/riot+compiler.min.js
-  dest: 'src/ui'
+  dest: 'app/ui'
