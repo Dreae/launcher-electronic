@@ -24,8 +24,8 @@
           <div class="mdl-mini-footer--left-section">
             <div class="mdl-logo">Amorous</div>
             <ul class="mdl-mini-footer--link-list">
-              <li><a href="https://forums.amorousgame.com">Forums</a></li>
-              <li><a href="https://www.patreon.com/Amorous">Patreon</a></li>
+              <li><a href="javascript:void(0)" onclick="openLink('https://forums.amorousgame.com')">Forums</a></li>
+              <li><a href="javascript:void(0)" onclick="openLink('https://www.patreon.com/Amorous')">Patreon</a></li>
             </ul>
           </div>
           <div class="mdl-mini-footer--right-section">
@@ -37,6 +37,10 @@
     <script src="bower_components/riot/riot+compiler.min.js"></script>
     <script src="riot/games.js"></script>
     <script>
+      function openLink(url) {
+        var shell = require('shell');
+        shell.openExternal(url);
+      }
       riot.mount('games');
     </script>
   </body>
