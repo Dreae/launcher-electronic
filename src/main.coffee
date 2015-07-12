@@ -9,7 +9,7 @@ app.on 'ready', ->
       if !exists
         fs.rename('resources/app/7za.exe', './7za.exe')
     )
-  
+
   mainWindow = new BrowserWindow(
     width: 1080,
     height: 720,
@@ -17,7 +17,6 @@ app.on 'ready', ->
     resizable: false,
     'use-content-size': true
   );
-  mainWindow.openDevTools();
   mainWindow.loadUrl('file://'+ __dirname + '/ui/index.html');
 
   mainWindow.on 'closed', ->

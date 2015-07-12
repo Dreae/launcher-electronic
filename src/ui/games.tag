@@ -99,7 +99,7 @@
     <div class="mdl-card__supporting-text">
       { description }
     </div>
-    <div show={ updateAvailable == 0 && playable() } class="mdl-card__actions mdl-card--border">
+    <div show={ updateAvailable == 0 && playable() } class="mdl-card__actions mdl-card--border update-single-action">
       Your game is up-to-date!
       <a class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect pull-right" onclick={ launchGame } disabled={ launching }>
         Play!
@@ -153,13 +153,14 @@
   vm.launching = false;
   vm.updateCheckError = null;
   vm.updateError = null;
+  vm.deleting = false;
 
   toggleLaunch(e) {
     vm.launchASAP = !vm.launchASAP;
   }
 
   playable() {
-    return !updating && !launching && !updateError
+    return !vm.updating && !vm.launching && !vm.updateError && !vm.deleting
   }
 
   launchGame(e) {
